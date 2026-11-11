@@ -158,6 +158,12 @@ variable "suse_observability_hostname" {
   default     = null
 }
 
+variable "suse_observability_allowed_origins" {
+  type        = list(string)
+  description = "Browser origins allowed to call SUSE Observability's API cross-origin (stackstate.allowedOrigins in the Helm chart), e.g. [\"https://rancher.example.com\"] for the Rancher UI extension. Without its origin listed here, the Rancher UI extension fails to connect with \"The Rancher host is not configured as an allowed origin for SUSE Observability.\" Leave as [] (the default) if nothing needs cross-origin access."
+  default     = []
+}
+
 # --- SUSE registration & Customer Center ---
 
 variable "sles_reg_code" {

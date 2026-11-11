@@ -38,6 +38,7 @@ suse_observability_license        = "YOUR_SUSE_OBSERVABILITY_LICENSE_KEY"
 suse_observability_admin_password = "a_very_strong_password_for_the_admin_user"
 suse_observability_sizing_profile = "trial" # trial, 10-nonha, 20-nonha, 50-nonha, 100-nonha, 150-ha, 250-ha, 500-ha, 4000-ha
 # suse_observability_chart_version = "" # Leave "" for the latest chart release
+# suse_observability_allowed_origins = ["https://rancher.YOUR_DOMAIN"] # Required for the Rancher UI extension to connect - see README
 
 # Shared secret token used by RKE2 cluster nodes to join the cluster
 rke2_token = "a_secure_random_string_for_rke2"

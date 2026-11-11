@@ -281,6 +281,15 @@ CHART_VERSION_OPTS=""
 CHART_VERSION_OPTS="--version ${suse_observability_chart_version}"
 %{ endif ~}
 
+# Browser clients (e.g. the Rancher UI extension) calling SUSE Observability's
+# API cross-origin are rejected unless their origin is explicitly allow-listed -
+# without this, the Rancher UI extension fails with "The Rancher host is not
+# configured as an allowed origin for SUSE Observability."
+ALLOWED_ORIGINS_OPTS=""
+%{ if allowed_origins_csv != "" ~}
+ALLOWED_ORIGINS_OPTS="--set stackstate.allowedOrigins={${allowed_origins_csv}}"
+%{ endif ~}
+
 # SUSE Observability itself never terminates TLS - that's always the ingress
 # controller's job (see the README's TLS section) - so the chart's own
 # ingress.* values just need pointing at the RKE2-packaged controller and the
@@ -297,6 +306,7 @@ helm upgrade --install suse-observability suse-observability/suse-observability 
   --set ingress.tls[0].hosts[0]="${observability_hostname}" \
   --set ingress.tls[0].secretName="$TLS_SECRET_NAME" \
   $CHART_VERSION_OPTS \
+  $ALLOWED_ORIGINS_OPTS \
   --wait --timeout 30m
 
 echo "SUSE Observability Helm release is deployed and all pods report Ready."

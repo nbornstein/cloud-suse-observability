@@ -107,6 +107,7 @@ resource "aws_instance" "cluster_vm" {
       suse_observability_admin_password = var.suse_observability_admin_password,
       suse_observability_sizing_profile = var.suse_observability_sizing_profile,
       suse_observability_chart_version  = var.suse_observability_chart_version,
+      allowed_origins_csv               = join(",", var.suse_observability_allowed_origins),
       letsencrypt_email                 = var.letsencrypt_email,
       use_letsencrypt                   = var.use_letsencrypt,
       tls_cert_b64                      = local.tls_cert_b64,
