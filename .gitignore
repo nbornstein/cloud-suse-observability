@@ -1,0 +1,13 @@
+# Terraform state and plan files
+terraform/*.tfstate*
+terraform/*.tfplan
+terraform/terraform.tfvars
+terraform/.terraform/providers/*
+terraform/.terraform.lock.hcl
+terraform/.terraform.tfstate.lock.info
+terraform.tfstate
+.claude/
+
+# Editor swap files
+*.swp
+*.swo

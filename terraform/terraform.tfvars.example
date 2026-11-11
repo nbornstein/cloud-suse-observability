@@ -1,0 +1,66 @@
+# Copy this file to terraform.tfvars and fill in the values for your deployment.
+# terraform.tfvars is gitignored - it's where your secrets and environment-specific
+# settings actually live. See the README's "Configuration" section for context.
+
+cloud_provider     = "aws" # only "aws" is supported today
+cluster_node_count = 1     # 1 for a standalone RKE2 control plane, 3 for HA
+letsencrypt_email  = "YOUR_EMAIL@YOUR_DOMAIN"
+ssh_public_key     = "ssh-rsa AAAA..." # Your SSH public key content
+# allowed_admin_cidr_blocks = ["203.0.113.4/32"] # SSH/Kube-API access. Defaults to auto-detecting the IP running `terraform apply`; set to ["0.0.0.0/0"] to reopen to everyone.
+
+# --- AWS ---
+aws_region        = "us-east-1"
+# aws_vpc_cidr    = "10.3.0.0/16"
+# aws_admin_username = "ec2-user"
+# aws_ami_id      = "" # Leave "" to auto-discover the latest SLES 15 SP7 BYOS AMI
+# aws_sles_ami_owner_id = "679593333241" # SUSE's AMI-publishing account; only used by the aws_ami_id auto-discovery lookup
+# aws_instance_type = "m5.4xlarge" # See variables.tf for sizing guidance per suse_observability_sizing_profile
+
+# Optional: Specify component versions for a repeatable deployment.
+# Defaults to "v1.35.9+rke2r1" (ingress-nginx) if omitted. Set this to a
+# v1.36+ release, or "" for the latest release, to use Traefik instead - the
+# ingress controller and cert-manager ClusterIssuer are configured automatically
+# to match whichever one applies.
+# rke2_version         = "v1.35.9+rke2r1"
+# cert_manager_version = "v1.13.1"
+
+# --- Sensitive Values ---
+
+# Optional: SUSE Customer Center credentials for automatic de-registration on destroy
+scc_username = "YOUR_SCC_USERNAME"
+scc_password = "YOUR_SCC_PASSWORD"
+
+# SUSE registration (OS-level, via SUSE Customer Center)
+sles_reg_code = "YOUR_SLES_REG_CODE"
+
+# SUSE Observability (licensed separately from SCC - see README)
+suse_observability_license        = "YOUR_SUSE_OBSERVABILITY_LICENSE_KEY"
+suse_observability_admin_password = "a_very_strong_password_for_the_admin_user"
+suse_observability_sizing_profile = "trial" # trial, 10-nonha, 20-nonha, 50-nonha, 100-nonha, 150-ha, 250-ha, 500-ha, 4000-ha
+# suse_observability_chart_version = "" # Leave "" for the latest chart release
+
+# Shared secret token used by RKE2 cluster nodes to join the cluster
+rke2_token = "a_secure_random_string_for_rke2"
+
+# --- DNS: pick ONE of the following three options. See the README's "DNS Options". ---
+
+# Option 1: AWS Route53 (automatic DNS record creation)
+# suse_observability_hostname = "observability.YOUR_DOMAIN"
+# domain_name               = "YOUR_DOMAIN"
+# aws_create_route53_record = true
+# aws_route53_zone_id       = "YOUR_ROUTE53_ZONE_ID"
+
+# Option 2: sslip.io (zero-config, no domain or DNS provider needed)
+use_sslip_io = true
+
+# Option 3: Manual DNS (you create the A record yourself)
+# suse_observability_hostname = "observability.YOUR_DOMAIN"
+
+# --- TLS: pick ONE of the following two options. See the README's "TLS / Certificate Options". ---
+
+# Option 1: Let's Encrypt (default - no extra variables needed beyond letsencrypt_email above)
+# use_letsencrypt = true
+
+# Option 2: Custom certificate from AWS Secrets Manager
+# use_letsencrypt         = false
+# aws_tls_cert_secret_arn = "YOUR_SECRET_ARN"
